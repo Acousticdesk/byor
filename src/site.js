@@ -1,5 +1,6 @@
 require('./common')
 require('./images/logo.png')
+require('./images/star-logo.png')
 require('./images/radar_legend.png')
 require('./analytics.js')
 

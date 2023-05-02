@@ -293,69 +293,77 @@ const Factory = function () {
   var self = {}
   var sheet
 
-  self.build = function () {
-    if (!isValidConfig()) {
-      plotError(new InvalidConfigError(ExceptionMessages.INVALID_CONFIG))
-      return
-    }
-
-    window.addEventListener('keydown', function (e) {
-      if (featureToggles.UIRefresh2022 && e.key === '/') {
-        const inputElement =
-          d3.select('input.search-container__input').node() || d3.select('.input-sheet-form input').node()
-
-        if (document.activeElement !== inputElement) {
-          e.preventDefault()
-          inputElement.focus()
-          inputElement.scrollIntoView({
-            behavior: 'smooth',
-          })
-        }
-      }
-    })
-
-    const domainName = DomainName(window.location.search.substring(1))
-    const queryString = featureToggles.UIRefresh2022
-      ? window.location.href.match(/documentId(.*)/)
-      : window.location.href.match(/sheetId(.*)/)
-    const queryParams = queryString ? QueryParams(queryString[0]) : {}
-
-    const paramId = featureToggles.UIRefresh2022 ? queryParams.documentId : queryParams.sheetId
-    if (paramId && paramId.endsWith('.csv')) {
-      sheet = CSVDocument(paramId)
-      sheet.init().build()
-    } else if (paramId && paramId.endsWith('.json')) {
-      sheet = JSONFile(paramId)
-      sheet.init().build()
-    } else if (domainName && domainName.endsWith('google.com') && paramId) {
-      sheet = GoogleSheet(paramId, queryParams.sheetName)
-      sheet.init().build()
-    } else {
-      if (!featureToggles.UIRefresh2022) {
-        document.body.style.opacity = '1'
-        document.body.innerHTML = ''
-        const content = d3.select('body').append('div').attr('class', 'input-sheet')
-        plotLogo(content)
-        const bannerText =
-          '<div><h1>Build your own radar</h1><p>Once you\'ve <a href ="https://www.thoughtworks.com/radar/byor">created your Radar</a>, you can use this service' +
-          ' to generate an <br />interactive version of your Technology Radar. Not sure how? <a href ="https://www.thoughtworks.com/radar/byor">Read this first.</a></p></div>'
-
-        plotBanner(content, bannerText)
-
-        plotForm(content)
-
-        plotFooter(content)
-      }
-
-      setDocumentTitle()
-    }
+  self.build = function() {
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1EBbrYWkXhJ126lsN1gCDJi5vwEXpEpjUSXbpnv1dDGI/edit#gid=0'
+    sheet = GoogleSheet(SHEET_URL, '')
+    sheet.init().build()
+    setDocumentTitle()
   }
+
+  // self.build = function () {
+  //   if (!isValidConfig()) {
+  //     plotError(new InvalidConfigError(ExceptionMessages.INVALID_CONFIG))
+  //     return
+  //   }
+  //
+  //   window.addEventListener('keydown', function (e) {
+  //     if (featureToggles.UIRefresh2022 && e.key === '/') {
+  //       const inputElement =
+  //         d3.select('input.search-container__input').node() || d3.select('.input-sheet-form input').node()
+  //
+  //       if (document.activeElement !== inputElement) {
+  //         e.preventDefault()
+  //         inputElement.focus()
+  //         inputElement.scrollIntoView({
+  //           behavior: 'smooth',
+  //         })
+  //       }
+  //     }
+  //   })
+  //
+  //   const domainName = DomainName(window.location.search.substring(1))
+  //   const queryString = featureToggles.UIRefresh2022
+  //     ? window.location.href.match(/documentId(.*)/)
+  //     : window.location.href.match(/sheetId(.*)/)
+  //   const queryParams = queryString ? QueryParams(queryString[0]) : {}
+  //
+  //   const paramId = featureToggles.UIRefresh2022 ? queryParams.documentId : queryParams.sheetId
+  //   if (paramId && paramId.endsWith('.csv')) {
+  //     sheet = CSVDocument(paramId)
+  //     sheet.init().build()
+  //   } else if (paramId && paramId.endsWith('.json')) {
+  //     sheet = JSONFile(paramId)
+  //     sheet.init().build()
+  //   } else if (domainName && domainName.endsWith('google.com') && paramId) {
+  //     sheet = GoogleSheet(paramId, queryParams.sheetName)
+  //     sheet.init().build()
+  //   } else {
+  //     if (!featureToggles.UIRefresh2022) {
+  //       document.body.style.opacity = '1'
+  //       document.body.innerHTML = ''
+  //       const content = d3.select('body').append('div').attr('class', 'input-sheet')
+  //       plotLogo(content)
+  //       const bannerText =
+  //         '<div><h1>Build your own radar</h1><p>Once you\'ve <a href ="https://www.thoughtworks.com/radar/byor">created your Radar</a>, you can use this service' +
+  //         ' to generate an <br />interactive version of your Technology Radar. Not sure how? <a href ="https://www.thoughtworks.com/radar/byor">Read this first.</a></p></div>'
+  //
+  //       plotBanner(content, bannerText)
+  //
+  //       plotForm(content)
+  //
+  //       plotFooter(content)
+  //     }
+  //
+  //     setDocumentTitle()
+  //   }
+  // }
 
   return self
 }
 
 function setDocumentTitle() {
-  document.title = 'Build your own Radar'
+  // document.title = 'Build your own Radar'
+  document.title = 'Star FE Technology Radar'
 }
 
 function plotLoading(content) {

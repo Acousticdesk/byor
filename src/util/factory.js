@@ -365,7 +365,7 @@ const Factory = function () {
 
 function setDocumentTitle() {
   // document.title = 'Build your own Radar'
-  document.title = 'Star FE Technology Radar'
+  document.title = 'Star Web Technology Radar'
 }
 
 function plotLoading(content) {
